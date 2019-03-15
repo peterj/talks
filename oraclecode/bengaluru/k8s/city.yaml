@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: city-svc
+  labels:
+    app: city-svc
+    version: v1
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: city-svc
+        version: v1
+    spec:
+      containers:
+        - image: pj3677/city-svc:1.0.0
+          imagePullPolicy: Always
+          name: svc
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: city-svc
+  labels:
+    app: city-svc
+spec:
+  selector:
+    app: city-svc
+  ports:
+    - port: 80
+      name: http
+      targetPort: 8080
